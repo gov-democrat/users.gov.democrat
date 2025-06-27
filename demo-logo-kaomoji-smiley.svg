@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="100"
+   height="100"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="dem-logo-smilev1.svg"
+   inkscape:version="1.2 (dc2aeda, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10">
+    <linearGradient
+       id="linearGradient960"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#0044c9;stop-opacity:1;"
+         offset="0"
+         id="stop958" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient960"
+       id="linearGradient962"
+       x1="12.355758"
+       y1="41.381985"
+       x2="22.161916"
+       y2="41.381985"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(16.237172,-3.9789057)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient960"
+       id="linearGradient1201"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(16.237173,21.181298)"
+       x1="12.355758"
+       y1="41.381985"
+       x2="22.161916"
+       y2="41.381985" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     showguides="false"
+     inkscape:zoom="5.0988372"
+     inkscape:cx="31.575827"
+     inkscape:cy="49.521095"
+     inkscape:window-width="1388"
+     inkscape:window-height="971"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg6">
+    <sodipodi:guide
+       position="50,41"
+       orientation="1,0"
+       id="guide322"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="79.037628,50.380844"
+       orientation="0,-1"
+       id="guide324"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  
+  <!-- Animated group that rotates around the logo center -->
+  <g>
+    <animateTransform
+      attributeName="transform"
+      attributeType="XML"
+      type="rotate"
+      from="0 49.5 50"
+      to="360 49.5 50"
+      dur="10s"
+      repeatCount="indefinite"/>
+    
+    <ellipse
+       cy="-50"
+       cx="49.5"
+       style="fill:#fff9ea;stroke:#0044c9;stroke-width:11.9513"
+       id="circle2"
+       transform="scale(1,-1)"
+       rx="41.535175"
+       ry="39.966187" />
+    <path
+       d="m 43,67.5 v -35 h 16.5 a 17.5,17.5 0 0 1 0,35 z M 53,59 h 5 a 9,9 0 0 0 0,-18 h -5 z"
+       style="fill:#0044c9"
+       id="path4" />
+    <circle
+       style="fill:url(#linearGradient962);fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       id="path401"
+       cx="33.49601"
+       cy="37.40308"
+       r="4.9030786" />
+    <circle
+       style="fill:url(#linearGradient1201);fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       id="path401-3"
+       cx="33.49601"
+       cy="62.563286"
+       r="4.9030786" />
+  </g>
+</svg>
