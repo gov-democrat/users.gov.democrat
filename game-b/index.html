@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animal Emoji Quiz - Complete Game</title>
+    <title>GenAlphaCodex Game B</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
         
@@ -1144,6 +1144,32 @@
             input.value = code;
             hideSuggestions();
             input.focus();
+        }
+        
+        function showEmojiKitchenReward() {
+            const firstCode = currentAnimals[0].code;
+            const secondCode = currentAnimals[1].code;
+            const comboKey = `${firstCode}+${secondCode}`;
+            const reverseComboKey = `${secondCode}+${firstCode}`;
+            
+            const kitchenEmoji = emojiKitchenCombinations[comboKey] || 
+                               emojiKitchenCombinations[reverseComboKey] || 
+                               '✨'; // Fallback sparkles
+            
+            // Create kitchen reward display
+            const feedback = document.getElementById('feedback');
+            const kitchenReward = document.createElement('div');
+            kitchenReward.className = 'kitchen-reward';
+            kitchenReward.textContent = kitchenEmoji;
+            
+            feedback.appendChild(kitchenReward);
+            
+            // Remove after animation
+            setTimeout(() => {
+                if (kitchenReward.parentNode) {
+                    kitchenReward.parentNode.removeChild(kitchenReward);
+                }
+            }, 3500);
         }
         
         function handleKeyDown(event) {
