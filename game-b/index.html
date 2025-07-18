@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Emoji Quiz - Complete Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Fredoka', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .score {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+        }
+        
+        .timer {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(78,205,196,0.3);
+            min-width: 120px;
+        }
+        
+        .level-indicator {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .animal-display {
+            font-size: 120px;
+            margin: 30px 0;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 20px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .dual-animal-display {
+            margin: 30px 0;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            border-radius: 20px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .animal-pair {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .animal-item {
+            font-size: 100px;
+            text-align: center;
+        }
+        
+        .plus-sign {
+            font-size: 40px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .master-input-container {
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        .input-pair {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-pair .input-wrapper {
+            flex: 1;
+            min-width: 180px;
+            max-width: 200px;
+        }
+        
+        .submit-answer-btn {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Fredoka', cursive;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(17,153,142,0.3);
+        }
+        
+        .submit-answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17,153,142,0.4);
+        }
+        
+        .kitchen-reward {
+            font-size: 80px;
+            margin: 20px 0;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(253,203,110,0.3);
+            animation: kitchenGlow 2s ease-in-out;
+        }
+        
+        @keyframes kitchenGlow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .choice {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Fredoka', cursive;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+        
+        .choice:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+        }
+        
+        .choice.correct {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            animation: correctPulse 0.6s ease;
+        }
+        
+        .choice.incorrect {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            animation: incorrectShake 0.6s ease;
+        }
+        
+        .alpha-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+            margin-top: 5px;
+            font-weight: 400;
+        }
+        
+        .input-container {
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .emoji-input {
+            width: 100%;
+            padding: 20px 50px;
+            font-size: 18px;
+            font-family: 'JetBrains Mono', monospace;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9ff, #e8ecff);
+            text-align: center;
+            outline: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.2);
+        }
+        
+        .emoji-input:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78,205,196,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .colon-left, .colon-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .colon-left {
+            left: 20px;
+        }
+        
+        .colon-right {
+            right: 20px;
+        }
+        
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .suggestion-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .suggestion-item:hover, .suggestion-item.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .suggestion-emoji {
+            font-size: 20px;
+        }
+        
+        .suggestion-text {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .instruction {
+            font-size: 16px;
+            color: #666;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .feedback.correct {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            animation: correctPulse 0.6s ease;
+        }
+        
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            animation: incorrectShake 0.6s ease;
+        }
+        
+        .level-selection {
+            text-align: center;
+        }
+        
+        .level-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .level-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 25px 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Fredoka', cursive;
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+            min-width: 200px;
+        }
+        
+        .level-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+        }
+        
+        .level-button.expert {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+        }
+        
+        .level-button.master {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            box-shadow: 0 4px 15px rgba(155,89,182,0.3);
+        }
+        
+        .level-button.master:hover {
+            box-shadow: 0 8px 25px rgba(155,89,182,0.4);
+        }
+        
+        .level-description {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+        
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff6b6b;
+            animation: confetti-fall 3s linear forwards;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .raindrop {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, #4a90e2);
+            border-radius: 0 0 2px 2px;
+            animation: rain-fall 2s linear forwards;
+        }
+        
+        @keyframes rain-fall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        .start-screen, .game-over-screen {
+            text-align: center;
+        }
+        
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .play-button {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Fredoka', cursive;
+            box-shadow: 0 4px 15px rgba(17,153,142,0.3);
+        }
+        
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17,153,142,0.4);
+        }
+        
+        .final-score {
+            font-size: 48px;
+            font-weight: 700;
+            color: #333;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .back-button {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Fredoka', cursive;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            background: #7f8c8d;
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .animal-display {
+                font-size: 80px;
+                height: 120px;
+            }
+            
+            .choices {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .choice {
+                padding: 15px;
+            }
+            
+            .level-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .emoji-input {
+                padding: 15px 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div id="startScreen" class="start-screen">
+            <h1 class="title">🐾 Animal Emoji Quiz</h1>
+            <p class="subtitle">Test your animal emoji knowledge!<br>Choose your difficulty level:</p>
+            
+            <div class="level-selection">
+                <div class="level-buttons">
+                    <button class="level-button" onclick="startGame('easy')">
+                        <div>🎯 Easy Mode</div>
+                        <div class="level-description">Multiple choice questions<br>7 seconds per question</div>
+                    </button>
+                    <button class="level-button expert" onclick="startGame('expert')">
+                        <div>🏆 Expert Mode</div>
+                        <div class="level-description">Type emoji shortcodes<br>15 seconds per question</div>
+                    </button>
+                    <button class="level-button master" onclick="startGame('master')">
+                        <div>👑 Master Mode</div>
+                        <div class="level-description">Type both animal codes<br>15 seconds per question</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Screen -->
+        <div id="gameScreen" class="hidden">
+            <div class="header">
+                <div class="level-indicator" id="levelIndicator">Easy Mode</div>
+                <div class="score">Score: <span id="score">0</span></div>
+                <div class="timer">Time: <span id="timer">7</span>s</div>
+            </div>
+            
+            <div class="animal-display" id="animalDisplay">🐶</div>
+            
+            <!-- Dual Animal Display for Master Mode -->
+            <div class="dual-animal-display hidden" id="dualAnimalDisplay">
+                <div class="animal-pair">
+                    <div class="animal-item" id="firstAnimal">🐶</div>
+                    <div class="plus-sign">+</div>
+                    <div class="animal-item" id="secondAnimal">🐱</div>
+                </div>
+            </div>
+            
+            <!-- Master Mode Input Container -->
+            <div class="master-input-container hidden" id="masterInputContainer">
+                <div class="input-pair">
+                    <div class="input-wrapper">
+                        <div class="colon-left">:</div>
+                        <input type="text" class="emoji-input" id="firstAnimalInput" placeholder="First animal..." autocomplete="off">
+                        <div class="colon-right">:</div>
+                        <div class="suggestions hidden" id="firstSuggestions"></div>
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="colon-left">:</div>
+                        <input type="text" class="emoji-input" id="secondAnimalInput" placeholder="Second animal..." autocomplete="off">
+                        <div class="colon-right">:</div>
+                        <div class="suggestions hidden" id="secondSuggestions"></div>
+                    </div>
+                </div>
+                <div class="instruction">Type both shortcode names (e.g., "dog" and "cat") or use Tab to select</div>
+                <button class="submit-answer-btn hidden" id="submitAnswerBtn" onclick="checkMasterAnswer()">Submit Answer</button>
+            </div>
+            
+            <!-- Multiple Choice Interface -->
+            <div class="choices hidden" id="choices">
+                <!-- Choices will be populated by JavaScript -->
+            </div>
+            
+            <!-- Typing Interface -->
+            <div class="input-container hidden" id="inputContainer">
+                <div class="input-wrapper">
+                    <div class="colon-left">:</div>
+                    <input type="text" class="emoji-input" id="emojiInput" placeholder="Type animal name..." autocomplete="off">
+                    <div class="colon-right">:</div>
+                    <div class="suggestions hidden" id="suggestions"></div>
+                </div>
+                <div class="instruction">Type the shortcode name (e.g., "dog", "cat") or use Tab to select</div>
+            </div>
+            
+            <div class="feedback hidden" id="feedback"></div>
+        </div>
+        
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="game-over-screen hidden">
+            <button class="back-button" onclick="showStartScreen()">← Choose New Level</button>
+            <h1 class="title" id="gameOverTitle">Game Complete! 🎉</h1>
+            <div class="final-score" id="finalScore">0</div>
+            <p class="subtitle" id="gameOverSubtitle">Great job learning about animals!</p>
+            <button class="play-button" onclick="restartCurrentLevel()">Play Same Level Again! 🔄</button>
+        </div>
+    </div>
+    
+    <div class="confetti" id="confetti"></div>
+
+    <script>
+        const animals = [
+            { emoji: '🐶', name: 'Dog', code: 'dog' },
+            { emoji: '🐱', name: 'Cat', code: 'cat' },
+            { emoji: '🐭', name: 'Mouse', code: 'mouse' },
+            { emoji: '🐹', name: 'Hamster', code: 'hamster' },
+            { emoji: '🐰', name: 'Rabbit', code: 'rabbit' },
+            { emoji: '🦊', name: 'Fox', code: 'fox_face' },
+            { emoji: '🐻', name: 'Bear', code: 'bear' },
+            { emoji: '🐼', name: 'Panda', code: 'panda_face' },
+            { emoji: '🐨', name: 'Koala', code: 'koala' },
+            { emoji: '🐯', name: 'Tiger', code: 'tiger' },
+            { emoji: '🦁', name: 'Lion', code: 'lion' },
+            { emoji: '🐮', name: 'Cow', code: 'cow' },
+            { emoji: '🐷', name: 'Pig', code: 'pig' },
+            { emoji: '🐸', name: 'Frog', code: 'frog' },
+            { emoji: '🐵', name: 'Monkey', code: 'monkey_face' },
+            { emoji: '🐔', name: 'Chicken', code: 'chicken' },
+            { emoji: '🐧', name: 'Penguin', code: 'penguin' },
+            { emoji: '🐦', name: 'Bird', code: 'bird' },
+            { emoji: '🐤', name: 'Baby Chick', code: 'baby_chick' },
+            { emoji: '🦆', name: 'Duck', code: 'duck' },
+            { emoji: '🦅', name: 'Eagle', code: 'eagle' },
+            { emoji: '🦉', name: 'Owl', code: 'owl' },
+            { emoji: '🐺', name: 'Wolf', code: 'wolf' },
+            { emoji: '🐗', name: 'Boar', code: 'boar' },
+            { emoji: '🐴', name: 'Horse', code: 'horse' },
+            { emoji: '🦄', name: 'Unicorn', code: 'unicorn' },
+            { emoji: '🐝', name: 'Bee', code: 'bee' },
+            { emoji: '🐛', name: 'Bug', code: 'bug' },
+            { emoji: '🦋', name: 'Butterfly', code: 'butterfly' },
+            { emoji: '🐌', name: 'Snail', code: 'snail' },
+            { emoji: '🐞', name: 'Ladybug', code: 'lady_beetle' },
+            { emoji: '🐢', name: 'Turtle', code: 'turtle' },
+            { emoji: '🐍', name: 'Snake', code: 'snake' },
+            { emoji: '🐙', name: 'Octopus', code: 'octopus' },
+            { emoji: '🐠', name: 'Fish', code: 'tropical_fish' },
+            { emoji: '🐡', name: 'Blowfish', code: 'blowfish' },
+            { emoji: '🦈', name: 'Shark', code: 'shark' },
+            { emoji: '🐳', name: 'Whale', code: 'whale' },
+            { emoji: '🐬', name: 'Dolphin', code: 'dolphin' },
+            { emoji: '🦀', name: 'Crab', code: 'crab' }
+        ];
+        
+        // Sample emoji kitchen combinations for rewards
+        const emojiKitchenCombinations = {
+            'dog+cat': '🐕‍🦺', 'cat+dog': '🐕‍🦺',
+            'bear+panda': '🧸', 'panda+bear': '🧸',
+            'lion+tiger': '🦁', 'tiger+lion': '🦁',
+            'fish+shark': '🐟', 'shark+fish': '🐟',
+            'bee+butterfly': '🌺', 'butterfly+bee': '🌺',
+            'mouse+cat': '🐭', 'cat+mouse': '🐭',
+            'duck+penguin': '🐧', 'penguin+duck': '🐧',
+            'fox+wolf': '🐺', 'wolf+fox': '🐺',
+            'pig+cow': '🐄', 'cow+pig': '🐄',
+            'rabbit+hamster': '🐹', 'hamster+rabbit': '🐹',
+            'turtle+snail': '🐌', 'snail+turtle': '🐌',
+            'horse+unicorn': '🦄', 'unicorn+horse': '🦄',
+            'octopus+crab': '🦀', 'crab+octopus': '🦀',
+            'whale+dolphin': '🐋', 'dolphin+whale': '🐋',
+            'owl+eagle': '🦅', 'eagle+owl': '🦅'
+        };
+        
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 7;
+        let timer;
+        let currentAnimal;
+        let currentAnimals = []; // For master mode - two animals
+        let gameActive = false;
+        let selectedSuggestionIndex = -1;
+        let currentLevel = 'easy';
+        let userAnswers = []; // For master mode - storing both answers
+        
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function showStartScreen() {
+            document.getElementById('startScreen').classList.remove('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+        }
+        
+        function startGame(level) {
+            currentLevel = level;
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            
+            const levelIndicator = document.getElementById('levelIndicator');
+            if (level === 'easy') {
+                levelIndicator.textContent = 'Easy Mode';
+            } else if (level === 'expert') {
+                levelIndicator.textContent = 'Expert Mode';
+            } else {
+                levelIndicator.textContent = 'Master Mode';
+            }
+            
+            const choices = document.getElementById('choices');
+            const inputContainer = document.getElementById('inputContainer');
+            const dualAnimalDisplay = document.getElementById('dualAnimalDisplay');
+            const animalDisplay = document.getElementById('animalDisplay');
+            const masterInputContainer = document.getElementById('masterInputContainer');
+            
+            if (level === 'easy') {
+                choices.classList.remove('hidden');
+                inputContainer.classList.add('hidden');
+                masterInputContainer.classList.add('hidden');
+                animalDisplay.classList.remove('hidden');
+                dualAnimalDisplay.classList.add('hidden');
+                timeLeft = 7;
+            } else if (level === 'expert') {
+                choices.classList.add('hidden');
+                inputContainer.classList.remove('hidden');
+                masterInputContainer.classList.add('hidden');
+                animalDisplay.classList.remove('hidden');
+                dualAnimalDisplay.classList.add('hidden');
+                timeLeft = 15;
+            } else {
+                choices.classList.add('hidden');
+                inputContainer.classList.add('hidden');
+                masterInputContainer.classList.remove('hidden');
+                animalDisplay.classList.add('hidden');
+                dualAnimalDisplay.classList.remove('hidden');
+                timeLeft = 15;
+            }
+            
+            currentQuestion = 0;
+            score = 0;
+            gameActive = true;
+            updateScore();
+            nextQuestion();
+        }
+        
+        function restartCurrentLevel() {
+            startGame(currentLevel);
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion >= 10) {
+                endGame();
+                return;
+            }
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.add('hidden');
+            feedback.classList.remove('correct', 'incorrect');
+            
+            if (currentLevel === 'master') {
+                // Select two random animals for master mode
+                const shuffledAnimals = shuffleArray([...animals]);
+                currentAnimals = [shuffledAnimals[0], shuffledAnimals[1]];
+                document.getElementById('firstAnimal').textContent = currentAnimals[0].emoji;
+                document.getElementById('secondAnimal').textContent = currentAnimals[1].emoji;
+                setupMasterInterface();
+            } else {
+                // Single animal for easy/expert modes
+                currentAnimal = animals[Math.floor(Math.random() * animals.length)];
+                const animalDisplay = document.getElementById('animalDisplay');
+                if (animalDisplay) {
+                    animalDisplay.textContent = currentAnimal.emoji;
+                }
+                
+                if (currentLevel === 'easy') {
+                    setupMultipleChoice();
+                } else {
+                    setupTypingInterface();
+                }
+            }
+            
+            timeLeft = currentLevel === 'easy' ? 7 : 15;
+            updateTimer();
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    if (currentLevel === 'easy') {
+                        selectAnswer(false, null);
+                    } else if (currentLevel === 'expert') {
+                        checkTypedAnswer();
+                    } else {
+                        checkMasterAnswer();
+                    }
+                }
+            }, 1000);
+            
+            currentQuestion++;
+        }
+        
+        function setupMultipleChoice() {
+            const wrongChoices = animals.filter(a => a !== currentAnimal);
+            const randomWrong = shuffleArray(wrongChoices).slice(0, 3);
+            const allChoices = shuffleArray([currentAnimal, ...randomWrong]);
+            
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+            
+            allChoices.forEach((animal, index) => {
+                const button = document.createElement('button');
+                button.className = 'choice';
+                button.innerHTML = `
+                    <div>${animal.name}</div>
+                    <div class="alpha-code">:${animal.code}:</div>
+                `;
+                button.onclick = () => selectAnswer(animal === currentAnimal, button);
+                choicesContainer.appendChild(button);
+            });
+        }
+        
+        function setupMasterInterface() {
+            const firstInput = document.getElementById('firstAnimalInput');
+            const secondInput = document.getElementById('secondAnimalInput');
+            const submitBtn = document.getElementById('submitAnswerBtn');
+            
+            firstInput.value = '';
+            secondInput.value = '';
+            userAnswers = ['', ''];
+            submitBtn.classList.add('hidden');
+            
+            hideSuggestions();
+            firstInput.focus();
+        }
+        
+        function checkMasterAnswer() {
+            if (!gameActive) return;
+            
+            clearInterval(timer);
+            gameActive = false;
+            
+            const firstInput = document.getElementById('firstAnimalInput');
+            const secondInput = document.getElementById('secondAnimalInput');
+            const firstAnswer = firstInput.value.toLowerCase().trim();
+            const secondAnswer = secondInput.value.toLowerCase().trim();
+            
+            const correctFirst = currentAnimals[0].code.toLowerCase();
+            const correctSecond = currentAnimals[1].code.toLowerCase();
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden');
+            
+            let correctCount = 0;
+            if (firstAnswer === correctFirst) correctCount++;
+            if (secondAnswer === correctSecond) correctCount++;
+            
+            if (correctCount === 2) {
+                // Both correct - full points and emoji kitchen reward
+                const points = Math.max(1, timeLeft + 1) * 2; // Double points for master mode
+                score += points;
+                updateScore();
+                
+                feedback.textContent = `Perfect! +${points} points`;
+                feedback.classList.add('correct');
+                
+                showEmojiKitchenReward();
+                showConfetti();
+            } else if (correctCount === 1) {
+                // One correct - partial points
+                const points = Math.max(1, timeLeft + 1);
+                score += points;
+                updateScore();
+                
+                feedback.textContent = `Half correct! +${points} points. Answers: ${correctFirst}, ${correctSecond}`;
+                feedback.classList.add('incorrect');
+                
+                showRain();
+            } else {
+                // Both wrong
+                feedback.textContent = `Incorrect! The answers were: ${correctFirst}, ${correctSecond}`;
+                feedback.classList.add('incorrect');
+                
+                showRain();
+            }
+            
+            setTimeout(() => {
+                gameActive = true;
+                nextQuestion();
+            }, 4000); // Longer delay to show emoji kitchen reward
+        }
+        
+        function setupMasterInterface() {
+            const firstInput = document.getElementById('firstAnimalInput');
+            const secondInput = document.getElementById('secondAnimalInput');
+            const submitBtn = document.getElementById('submitAnswerBtn');
+            
+            firstInput.value = '';
+            secondInput.value = '';
+            userAnswers = ['', ''];
+            submitBtn.classList.add('hidden');
+            
+            hideSuggestions();
+            firstInput.focus();
+        }
+        
+        function checkMasterAnswer() {
+            if (!gameActive) return;
+            
+            clearInterval(timer);
+            gameActive = false;
+            
+            const firstInput = document.getElementById('firstAnimalInput');
+            const secondInput = document.getElementById('secondAnimalInput');
+            const firstAnswer = firstInput.value.toLowerCase().trim();
+            const secondAnswer = secondInput.value.toLowerCase().trim();
+            
+            const correctFirst = currentAnimals[0].code.toLowerCase();
+            const correctSecond = currentAnimals[1].code.toLowerCase();
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden');
+            
+            let correctCount = 0;
+            if (firstAnswer === correctFirst) correctCount++;
+            if (secondAnswer === correctSecond) correctCount++;
+            
+            if (correctCount === 2) {
+                // Both correct - full points and emoji kitchen reward
+                const points = Math.max(1, timeLeft + 1) * 2; // Double points for master mode
+                score += points;
+                updateScore();
+                
+                feedback.textContent = `Perfect! +${points} points`;
+                feedback.classList.add('correct');
+                
+                showEmojiKitchenReward();
+                showConfetti();
+            } else if (correctCount === 1) {
+                // One correct - partial points
+                const points = Math.max(1, timeLeft + 1);
+                score += points;
+                updateScore();
+                
+                feedback.textContent = `Half correct! +${points} points. Answers: ${correctFirst}, ${correctSecond}`;
+                feedback.classList.add('incorrect');
+                
+                showRain();
+            } else {
+                // Both wrong
+                feedback.textContent = `Incorrect! The answers were: ${correctFirst}, ${correctSecond}`;
+                feedback.classList.add('incorrect');
+                
+                showRain();
+            }
+            
+            setTimeout(() => {
+                gameActive = true;
+                nextQuestion();
+            }, 4000); // Longer delay to show emoji kitchen reward
+        }
+        
+        function setupTypingInterface() {
+            const input = document.getElementById('emojiInput');
+            input.value = '';
+            input.focus();
+            hideSuggestions();
+        }
+        
+        function selectAnswer(isCorrect, buttonElement) {
+            if (!gameActive) return;
+            
+            clearInterval(timer);
+            gameActive = false;
+            
+            const choices = document.querySelectorAll('.choice');
+            choices.forEach(choice => choice.style.pointerEvents = 'none');
+            
+            if (isCorrect) {
+                const points = Math.max(1, timeLeft + 1);
+                score += points;
+                updateScore();
+                
+                if (buttonElement) {
+                    buttonElement.classList.add('correct');
+                }
+                
+                showConfetti();
+            } else {
+                if (buttonElement) {
+                    buttonElement.classList.add('incorrect');
+                }
+                
+                choices.forEach(choice => {
+                    if (choice.innerHTML.includes(currentAnimal.name)) {
+                        choice.classList.add('correct');
+                    }
+                });
+                
+                showRain();
+            }
+            
+            setTimeout(() => {
+                gameActive = true;
+                choices.forEach(choice => {
+                    choice.style.pointerEvents = 'auto';
+                    choice.classList.remove('correct', 'incorrect');
+                });
+                nextQuestion();
+            }, 2000);
+        }
+        
+        function checkTypedAnswer() {
+            if (!gameActive) return;
+            
+            clearInterval(timer);
+            gameActive = false;
+            
+            const input = document.getElementById('emojiInput');
+            const userAnswer = input.value.toLowerCase().trim();
+            const correctAnswer = currentAnimal.code.toLowerCase();
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden');
+            
+            if (userAnswer === correctAnswer) {
+                const points = Math.max(1, timeLeft + 1);
+                score += points;
+                updateScore();
+                
+                feedback.textContent = `Correct! +${points} points`;
+                feedback.classList.add('correct');
+                
+                showConfetti();
+            } else {
+                feedback.textContent = `Incorrect! The answer was: ${correctAnswer}`;
+                feedback.classList.add('incorrect');
+                
+                showRain();
+            }
+            
+            setTimeout(() => {
+                gameActive = true;
+                nextQuestion();
+            }, 3000);
+        }
+        
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+        
+        function updateTimer() {
+            document.getElementById('timer').textContent = timeLeft;
+        }
+        
+        function showSuggestions(input) {
+            const suggestions = document.getElementById('suggestions');
+            const query = input.toLowerCase().trim();
+            
+            if (query.length === 0) {
+                hideSuggestions();
+                return;
+            }
+            
+            const matches = animals.filter(animal => 
+                animal.code.toLowerCase().includes(query) ||
+                animal.name.toLowerCase().includes(query)
+            ).slice(0, 5);
+            
+            if (matches.length === 0) {
+                hideSuggestions();
+                return;
+            }
+            
+            suggestions.innerHTML = '';
+            matches.forEach((animal, index) => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `
+                    <span class="suggestion-emoji">${animal.emoji}</span>
+                    <span class="suggestion-text">${animal.code}</span>
+                `;
+                item.onclick = () => selectSuggestion(animal.code);
+                suggestions.appendChild(item);
+            });
+            
+            suggestions.classList.remove('hidden');
+            selectedSuggestionIndex = -1;
+        }
+        
+        function hideSuggestions() {
+            document.getElementById('suggestions').classList.add('hidden');
+            selectedSuggestionIndex = -1;
+        }
+        
+        function selectSuggestion(code) {
+            const input = document.getElementById('emojiInput');
+            input.value = code;
+            hideSuggestions();
+            input.focus();
+        }
+        
+        function handleKeyDown(event) {
+            if (currentLevel !== 'expert') return;
+            
+            const suggestions = document.getElementById('suggestions');
+            const suggestionItems = suggestions.querySelectorAll('.suggestion-item');
+            
+            if (event.key === 'Tab' && suggestionItems.length > 0) {
+                event.preventDefault();
+                if (selectedSuggestionIndex === -1) {
+                    selectedSuggestionIndex = 0;
+                }
+                const selectedItem = suggestionItems[selectedSuggestionIndex];
+                const code = selectedItem.querySelector('.suggestion-text').textContent;
+                selectSuggestion(code);
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                if (selectedSuggestionIndex >= 0 && suggestionItems.length > 0) {
+                    const selectedItem = suggestionItems[selectedSuggestionIndex];
+                    const code = selectedItem.querySelector('.suggestion-text').textContent;
+                    selectSuggestion(code);
+                } else {
+                    checkTypedAnswer();
+                }
+            } else if (event.key === 'Escape') {
+                hideSuggestions();
+            }
+        }
+        
+        function handleKeyDown(event) {
+            if (currentLevel !== 'expert') return;
+            
+            const suggestions = document.getElementById('suggestions');
+            const suggestionItems = suggestions.querySelectorAll('.suggestion-item');
+            
+            if (event.key === 'Tab' && suggestionItems.length > 0) {
+                event.preventDefault();
+                if (selectedSuggestionIndex === -1) {
+                    selectedSuggestionIndex = 0;
+                }
+                const selectedItem = suggestionItems[selectedSuggestionIndex];
+                const code = selectedItem.querySelector('.suggestion-text').textContent;
+                selectSuggestion(code);
+            } else if (event.key === 'ArrowDown' && suggestionItems.length > 0) {
+                event.preventDefault();
+                selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, suggestionItems.length - 1);
+                updateSuggestionSelection();
+            } else if (event.key === 'ArrowUp' && suggestionItems.length > 0) {
+                event.preventDefault();
+                selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, 0);
+                updateSuggestionSelection();
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                if (selectedSuggestionIndex >= 0 && suggestionItems.length > 0) {
+                    const selectedItem = suggestionItems[selectedSuggestionIndex];
+                    const code = selectedItem.querySelector('.suggestion-text').textContent;
+                    selectSuggestion(code);
+                } else {
+                    checkTypedAnswer();
+                }
+            } else if (event.key === 'Escape') {
+                hideSuggestions();
+            }
+        }
+        
+        function updateSuggestionSelection() {
+            const suggestionItems = document.getElementById('suggestions').querySelectorAll('.suggestion-item');
+            suggestionItems.forEach((item, index) => {
+                if (index === selectedSuggestionIndex) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+        
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitAnswerBtn');
+            if (userAnswers[0] && userAnswers[0].trim() && userAnswers[1] && userAnswers[1].trim()) {
+                submitBtn.classList.remove('hidden');
+            } else {
+                submitBtn.classList.add('hidden');
+            }
+        }
+        
+        function showMasterSuggestions(input, position) {
+            const suggestionsId = position === 'first' ? 'firstSuggestions' : 'secondSuggestions';
+            const suggestions = document.getElementById(suggestionsId);
+            const query = input.toLowerCase().trim();
+            
+            if (query.length === 0) {
+                hideMasterSuggestions(position);
+                return;
+            }
+            
+            const matches = animals.filter(animal => 
+                animal.code.toLowerCase().includes(query) ||
+                animal.name.toLowerCase().includes(query)
+            ).slice(0, 5);
+            
+            if (matches.length === 0) {
+                hideMasterSuggestions(position);
+                return;
+            }
+            
+            suggestions.innerHTML = '';
+            matches.forEach((animal, index) => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `
+                    <span class="suggestion-emoji">${animal.emoji}</span>
+                    <span class="suggestion-text">${animal.code}</span>
+                `;
+                item.onclick = () => selectMasterSuggestion(animal.code, position);
+                suggestions.appendChild(item);
+            });
+            
+            suggestions.classList.remove('hidden');
+        }
+        
+        function hideMasterSuggestions(position) {
+            const suggestionsId = position === 'first' ? 'firstSuggestions' : 'secondSuggestions';
+            const suggestionElement = document.getElementById(suggestionsId);
+            if (suggestionElement) {
+                suggestionElement.classList.add('hidden');
+            }
+        }
+        
+        function selectMasterSuggestion(code, position) {
+            const inputId = position === 'first' ? 'firstAnimalInput' : 'secondAnimalInput';
+            const input = document.getElementById(inputId);
+            input.value = code;
+            userAnswers[position === 'first' ? 0 : 1] = code;
+            updateSubmitButton();
+            hideMasterSuggestions(position);
+            
+            // Focus next input or submit button
+            if (position === 'first') {
+                document.getElementById('secondAnimalInput').focus();
+            } else {
+                const submitBtn = document.getElementById('submitAnswerBtn');
+                if (!submitBtn.classList.contains('hidden')) {
+                    submitBtn.focus();
+                }
+            }
+        }
+        
+        function handleMasterKeyDown(event, position) {
+            if (currentLevel !== 'master') return;
+            
+            const suggestionsId = position === 'first' ? 'firstSuggestions' : 'secondSuggestions';
+            const suggestions = document.getElementById(suggestionsId);
+            const suggestionItems = suggestions.querySelectorAll('.suggestion-item');
+            
+            if (event.key === 'Tab' && suggestionItems.length > 0) {
+                event.preventDefault();
+                const code = suggestionItems[0].querySelector('.suggestion-text').textContent;
+                selectMasterSuggestion(code, position);
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                if (position === 'first') {
+                    document.getElementById('secondAnimalInput').focus();
+                } else {
+                    checkMasterAnswer();
+                }
+            } else if (event.key === 'Escape') {
+                hideMasterSuggestions(position);
+            }
+        }
+        
+        function showConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.className = 'confetti-piece';
+                confettiPiece.style.left = Math.random() * 100 + '%';
+                confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiPiece.style.animationDelay = Math.random() * 0.5 + 's';
+                confettiContainer.appendChild(confettiPiece);
+                
+                setTimeout(() => {
+                    confettiPiece.remove();
+                }, 3000);
+            }
+        }
+        
+        function showRain() {
+            const confettiContainer = document.getElementById('confetti');
+            
+            for (let i = 0; i < 30; i++) {
+                const raindrop = document.createElement('div');
+                raindrop.className = 'raindrop';
+                raindrop.style.left = Math.random() * 100 + '%';
+                raindrop.style.animationDelay = Math.random() * 0.5 + 's';
+                confettiContainer.appendChild(raindrop);
+                
+                setTimeout(() => {
+                    raindrop.remove();
+                }, 2000);
+            }
+        }
+        
+        function endGame() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = score + ' points!';
+            
+            const gameOverTitle = document.getElementById('gameOverTitle');
+            const gameOverSubtitle = document.getElementById('gameOverSubtitle');
+            
+            if (currentLevel === 'easy') {
+                gameOverTitle.textContent = 'Easy Mode Complete! 🎉';
+                gameOverSubtitle.textContent = 'Great job! Ready to try Expert Mode?';
+            } else if (currentLevel === 'expert') {
+                gameOverTitle.textContent = 'Expert Mode Complete! 🏆';
+                gameOverSubtitle.textContent = 'Amazing! You mastered the emoji shortcodes!';
+            } else {
+                gameOverTitle.textContent = 'Master Mode Complete! 👑';
+                gameOverSubtitle.textContent = 'Incredible! You conquered the ultimate challenge!';
+            }
+        }
+        
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitAnswerBtn');
+            if (userAnswers[0] && userAnswers[0].trim() && userAnswers[1] && userAnswers[1].trim()) {
+                submitBtn.classList.remove('hidden');
+            } else {
+                submitBtn.classList.add('hidden');
+            }
+        }
+        
+        function showMasterSuggestions(input, position) {
+            const suggestionsId = position === 'first' ? 'firstSuggestions' : 'secondSuggestions';
+            const suggestions = document.getElementById(suggestionsId);
+            const query = input.toLowerCase().trim();
+            
+            if (query.length === 0) {
+                hideMasterSuggestions(position);
+                return;
+            }
+            
+            const matches = animals.filter(animal => 
+                animal.code.toLowerCase().includes(query) ||
+                animal.name.toLowerCase().includes(query)
+            ).slice(0, 5);
+            
+            if (matches.length === 0) {
+                hideMasterSuggestions(position);
+                return;
+            }
+            
+            suggestions.innerHTML = '';
+            matches.forEach((animal, index) => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `
+                    <span class="suggestion-emoji">${animal.emoji}</span>
+                    <span class="suggestion-text">${animal.code}</span>
+                `;
+                item.onclick = () => selectMasterSuggestion(animal.code, position);
+                suggestions.appendChild(item);
+            });
+            
+            suggestions.classList.remove('hidden');
+        }
+        
+        function hideMasterSuggestions(position) {
+            const suggestionsId = position === 'first' ? 'firstSuggestions' : 'secondSuggestions';
+            const suggestionElement = document.getElementById(suggestionsId);
+            if (suggestionElement) {
+                suggestionElement.classList.add('hidden');
+            }
+        }
+        
+        function selectMasterSuggestion(code, position) {
+            const inputId = position === 'first' ? 'firstAnimalInput' : 'secondAnimalInput';
+            const input = document.getElementById(inputId);
+            input.value = code;
+            userAnswers[position === 'first' ? 0 : 1] = code;
+            updateSubmitButton();
+            hideMasterSuggestions(position);
+            
+            // Focus next input or submit button
+            if (position === 'first') {
+                document.getElementById('secondAnimalInput').focus();
+            } else {
+                const submitBtn = document.getElementById('submitAnswerBtn');
+                if (!submitBtn.classList.contains('hidden')) {
+                    submitBtn.focus();
+                }
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('emojiInput');
+            const firstInput = document.getElementById('firstAnimalInput');
+            const secondInput = document.getElementById('secondAnimalInput');
+            
+            // Expert mode input events
+            input.addEventListener('input', function(event) {
+                if (currentLevel === 'expert') {
+                    showSuggestions(event.target.value);
+                }
+            });
+            
+            input.addEventListener('keydown', handleKeyDown);
+            
+            input.addEventListener('blur', function() {
+                setTimeout(hideSuggestions, 150);
+            });
+            
+            // Master mode input events
+            firstInput.addEventListener('input', function(event) {
+                if (currentLevel === 'master') {
+                    showMasterSuggestions(event.target.value, 'first');
+                    userAnswers[0] = event.target.value;
+                    updateSubmitButton();
+                }
+            });
+            
+            secondInput.addEventListener('input', function(event) {
+                if (currentLevel === 'master') {
+                    showMasterSuggestions(event.target.value, 'second');
+                    userAnswers[1] = event.target.value;
+                    updateSubmitButton();
+                }
+            });
+            
+            firstInput.addEventListener('keydown', function(event) {
+                handleMasterKeyDown(event, 'first');
+            });
+            
+            secondInput.addEventListener('keydown', function(event) {
+                handleMasterKeyDown(event, 'second');
+            });
+            
+            // Click outside to hide suggestions
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.input-wrapper')) {
+                    hideSuggestions();
+                    hideMasterSuggestions('first');
+                    hideMasterSuggestions('second');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
